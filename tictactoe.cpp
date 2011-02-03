@@ -1,3 +1,4 @@
+
 #include<iostream>
 #include<stdio.h>
 using namespace std;
@@ -12,10 +13,10 @@ int main()
 	int playerTurn = 1;
 	int gameOver = 1;
 	int moveCount = 0;
-		
+
 	printf("\n\nPlease use numbers in the spaces as inputs for X or O\n\n");
 	printBoard(0);
-	
+
 	for(int i = 0; i < 9; i++){
 		board[i] = ' ';
 	}
@@ -26,11 +27,20 @@ int main()
 		printBoard(0);	
 		cout << "\n\n";
 		printBoard(1);
-		int move;
+		int move, skip = 0;
 		cout << "Turn: ";
 		cin >> move;
-
-		if(board[move] == ' '){
+		if(cin.fail()){
+			cin.clear();
+			while(cin.get() != '\n');
+			skip = 1;
+		}else{
+			skip = 1;
+			for(int i = 0; i < 9; i++){
+				if(move == i) { skip = 0; }        
+			}                  
+		}
+		if(board[move] == ' ' && skip == 0){
 			char gamePiece;
 			if(playerTurn == 1){gamePiece = 'x';}else{ gamePiece = '0'; }
 			board[move] = gamePiece;
@@ -40,9 +50,9 @@ int main()
 				if(playerTurn == 1){ playerTurn = 2; }else { playerTurn = 1; }
 			}
 		}else{
-			cout << "ERROR: Space Occupied. Please re-enter move.";
+			cout << "ERROR: Bad user input. Please re-enter move.";
 		}
-		
+
 		if(moveCount == 9 && gameOver == 1){
 			cout << "\n\n";
 			printBoard(1);
@@ -50,13 +60,12 @@ int main()
 			return 0;
 		}	
 	}
-		
+
 	cout << "\n\nPlayer " << playerTurn << " is the winner!!!!\n\n";
 	printBoard(1);	
 
 	return 0;
 }
-
 void printBoard(int flag)
 {
 	if(flag == 0)
@@ -77,7 +86,6 @@ void printBoard(int flag)
 	}
 
 }
-
 int checkWinner()
 {
 	//Check Horizontals
@@ -89,7 +97,6 @@ int checkWinner()
 
 		base = base + 3;
 	}
-
 	//Check Verticals
 	for(int i = 0; i  < 3; i++){
 		base = i;
@@ -97,9 +104,7 @@ int checkWinner()
 			return 0;
 		}
 	}
-
 	//Check Horizontals
-
 	if(board[0] == board[4] && board[0] == board[8] && board[0] != ' '){
 		return 0;
 	}else if (board[2] == board[4] && board[2] == board[6] && board[2] != ' '){
@@ -108,6 +113,5 @@ int checkWinner()
 		return 1;
 	}
 
-	
-
 }
+
